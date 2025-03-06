@@ -1,21 +1,37 @@
-import { useState } from "react"
-const fifo = ( { processes }) => {
-
+const fifo = ({ processes }) => {
     let currentTime = 0;
-    let finishTimes = []
+    let calculations = [];
 
-    console.log('Running FIFO Algorithm')
-    console.log(processes)
-    for (let process of processes) {
+    console.log('Running FIFO Algorithm');
+    console.log(processes);
+
+    for (let i = 0; i < processes.length; i++) {
+        let { arrivalTime, burstTime } = processes[i];
+
+        // Ensure the CPU waits if the process arrives later than the current time
+        let startTime = Math.max(currentTime, arrivalTime);
+
         
-        let startTime = currentTime;
-        let finishTime = startTime + process.burstTime;
-        let turnaroundTime = finishTime = process.burstTime;
-        let waitingTime = turnaroundTime - process.burstTime
+        let completionTime = startTime + burstTime;
+        let turnaroundTime = completionTime - arrivalTime;
+        let waitingTime = turnaroundTime - burstTime;
+
+        // Update current time to track process execution
+        currentTime = completionTime;
+
+        calculations.push({
+            id: processes[i].id,
+            arrivalTime,
+            burstTime,
+            startTime,
+            completionTime,
+            turnaroundTime,
+            waitingTime
+        });
     }
 
-    console.log(finishTimes)
-    return 
-}
+    console.log(calculations);
+    return calculations;
+};
 
-export default fifo
+export default fifo;
