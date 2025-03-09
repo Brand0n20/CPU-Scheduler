@@ -1,4 +1,4 @@
-const fifo = ({ processes }) => {
+const Fifo = ({processes}) => {
     let currentTime = 0;
     let calculations = [];
 
@@ -6,27 +6,22 @@ const fifo = ({ processes }) => {
     console.log(processes);
 
     for (let i = 0; i < processes.length; i++) {
-        let { arrivalTime, burstTime } = processes[i];
+        let { arrivalTime, burstTime, id } = processes[i];
 
-        // Ensure the CPU waits if the process arrives later than the current time
         let startTime = Math.max(currentTime, arrivalTime);
-
-        
         let completionTime = startTime + burstTime;
         let turnaroundTime = completionTime - arrivalTime;
         let waitingTime = turnaroundTime - burstTime;
 
-        // Update current time to track process execution
         currentTime = completionTime;
 
         calculations.push({
-            id: processes[i].id,
+            id,
             arrivalTime,
             burstTime,
-            startTime,
-            completionTime,
+            waitingTime,
             turnaroundTime,
-            waitingTime
+            completionTime
         });
     }
 
@@ -34,4 +29,4 @@ const fifo = ({ processes }) => {
     return calculations;
 };
 
-export default fifo;
+export default Fifo;
