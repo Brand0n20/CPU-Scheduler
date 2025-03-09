@@ -29,11 +29,13 @@ const ProcessInputTable = ({ processes, generateRandomProcess}) => {
               </td>
             </tr>
           )}
-        <Button variant="secondary" className="mt-3" onClick={generateRandomProcess}>
-              Generate Random Process
-            </Button>
         </tbody>
       </table>
+      <div className="col-md-4">
+        <Button variant="secondary" className="mt-3" onClick={generateRandomProcess}>
+                Generate Random Process
+        </Button>
+      </div>
     </div>
   );
 };
