@@ -2,47 +2,64 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import fifo from './algorithms/fifo'
-import InputTable from './components/inputTable'
-import { OutputTable } from './components/outputTable'
-
+import fifo from './algorithms/fifo';
+import { sjf } from './algorithms/sjf';
+import { mlfq } from './algorithms/mlfq';
+import { rr } from './algorithms/rr';
+import { stcf } from './algorithms/stcf';
+import InputTable from './components/inputTable';
+import { OutputTable } from './components/outputTable';
 
 function App() {
-
   const [processes, setProcesses] = useState([]);
-  const [pid, setPid] = useState("");
-  const [arrivalTime, setArrivalTime] = useState("");
-  const [burstTime, setBurstTime] = useState("");
-  const [schedulingMethod, setSchedulingMethod] = useState("Round Robin");
+  const [schedulingMethod, setSchedulingMethod] = useState("FIFO");
   const [timeQuantum, setTimeQuantum] = useState(2);
   const [calculations, setCalculations] = useState([]);
 
-  const addProcess = () => {
-    if (pid && arrivalTime && burstTime) {
-      setProcesses([
-        ...processes,
-        { id: pid, arrivalTime: parseInt(arrivalTime), burstTime: parseInt(burstTime) },
-      ]);
-      // sets these inputs back to blank
-      setPid("");
-      setArrivalTime("");
-      setBurstTime("");
-    }
+  // Function to generate a random process
+  const generateRandomProcess = () => {
+    const pid = Math.floor(Math.random() * 1000); // Random PID (0-999)
+    const arrivalTime = Math.floor(Math.random() * 101); // Random arrival time (0-100)
+    const burstTime = Math.floor(Math.random() * 20) + 1; // Random burst time (1-20)
+
+    setProcesses([
+      ...processes,
+      { id: pid, arrivalTime, burstTime },
+    ]);
   };
 
   const methodSelected = () => {
-    if (schedulingMethod === 'FIFO') {
-      setCalculations(fifo({ processes }))
-    }
+    const algorithms = {
+      'FIFO': fifo,
+      'SJF': sjf,
+      'MLFQ': mlfq,
+      'Round Robin': rr,
+      'STCF': stcf
+    };
 
-  }
+    let selectedAlgorithm = algorithms[schedulingMethod];
+    if (selectedAlgorithm) {
+      // pass processes as an object when calling 'selectedAlgorithm'
+      const newCalculations = selectedAlgorithm({ processes }).map((calc) => ({
+        ...calc,
+        algorithm: schedulingMethod, // Add algorithm name to differentiate results
+      }));
+
+      setCalculations([
+        ...calculations,
+        ...newCalculations, // Spread newCalculations so that each item is added individually
+      ]);
+    } else {
+      alert("Invalid Scheduling Method Selected!");
+    }
+  };
 
   return (
     <div className="App">
       <header>
-        <nav className='navbar navbar-dark bg-primary'>
+        <nav className="navbar navbar-dark bg-primary">
           <div className="container-fluid">
-            <span className='navbar-brand'>CPU Scheduling Simulator</span>
+            <span className="navbar-brand">CPU Scheduling Simulator</span>
           </div>
         </nav>
       </header>
@@ -50,16 +67,8 @@ function App() {
       <div className="container mt-4">
         <div className="row">
           {/* Input Table */}
-          <InputTable
-            processes={processes}
-            pid={pid}
-            arrivalTime={arrivalTime}
-            burstTime={burstTime}
-            setPid={setPid}
-            setArrivalTime={setArrivalTime}
-            setBurstTime={setBurstTime}
-            addProcess={addProcess}
-          />
+          <InputTable processes={processes} generateRandomProcess={generateRandomProcess} />
+
           {/* Scheduling Method Section */}
           <div className="col-md-4">
             <div className="border p-3">
@@ -88,7 +97,6 @@ function App() {
                   />
                 </div>
               )}
-
               {/* Calculate Button */}
               <Button variant="primary" className="mt-3" onClick={methodSelected}>
                 Calculate
@@ -96,13 +104,10 @@ function App() {
             </div>
           </div>
         </div>
-      <div className="row pt-5">
-      {/* Output Table */}
-      {calculations.length > 0 && <OutputTable
-      calculations={calculations}
-      ></OutputTable>
-      }
-      </div>
+        <div className="row pt-5">
+          {/* Output Table */}
+          {calculations.length > 0 && <OutputTable calculations={calculations} />}
+        </div>
       </div>
     </div>
   );

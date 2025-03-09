@@ -1,4 +1,5 @@
-export const OutputTable = ({ calculations }) => {
+export const OutputTable = ({ calculations}) => {
+
     return (
         <div className="col-md-8">
       {/* Table Section */}
@@ -14,14 +15,14 @@ export const OutputTable = ({ calculations }) => {
           </tr>
         </thead>
         <tbody>
-          {calculations.map((p, index) => (
+          {calculations.map((calc, index) => (
             <tr key={index}>
-              <td>{p.id}</td>
-              <td>{p.arrivalTime}</td>
-              <td>{p.burstTime}</td>
-              <td>{p.completionTime}</td>
-              <td>{p.waitingTime}</td>
-              <td>{p.turnaroundTime}</td>
+              <td>{calc.id}</td>
+              <td>{calc.arrivalTime}</td>
+              <td>{calc.burstTime}</td>
+              <td>{calc.completionTime}</td>
+              <td>{calc.waitingTime}</td>
+              <td>{calc.turnaroundTime}</td>
 
             </tr>
           ))}

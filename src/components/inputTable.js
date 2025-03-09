@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 
-const ProcessInputTable = ({ processes, pid, arrivalTime, burstTime, setPid, setArrivalTime, setBurstTime, addProcess }) => {
+const ProcessInputTable = ({ processes, generateRandomProcess}) => {
   return (
     <div className="col-md-8">
-      {/* Table Section */}
+      <h5>Process List</h5>
       <table className="table table-bordered">
         <thead className="table-primary">
           <tr>
@@ -14,43 +14,26 @@ const ProcessInputTable = ({ processes, pid, arrivalTime, burstTime, setPid, set
           </tr>
         </thead>
         <tbody>
-          {processes.map((p, index) => (
-            <tr key={index}>
-              <td>{p.id}</td>
-              <td>{p.arrivalTime}</td>
-              <td>{p.burstTime}</td>
+          {processes.length > 0 ? (
+            processes.map((p, index) => (
+              <tr key={index}>
+                <td>{p.id}</td>
+                <td>{p.arrivalTime}</td>
+                <td>{p.burstTime}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="3" className="text-center">
+                No processes generated yet.
+              </td>
             </tr>
-          ))}
+          )}
+        <Button variant="secondary" className="mt-3" onClick={generateRandomProcess}>
+              Generate Random Process
+            </Button>
         </tbody>
       </table>
-
-      {/* Input Fields */}
-      <div className="d-flex gap-2">
-        <input
-          type="number"
-          className="form-control"
-          placeholder="Process ID"
-          value={pid}
-          onChange={(e) => setPid(e.target.value)}
-        />
-        <input
-          type="number"
-          className="form-control"
-          placeholder="Arrival Time"
-          value={arrivalTime}
-          onChange={(e) => setArrivalTime(e.target.value)}
-        />
-        <input
-          type="number"
-          className="form-control"
-          placeholder="Burst Time"
-          value={burstTime}
-          onChange={(e) => setBurstTime(e.target.value)}
-        />
-        <Button variant="primary" onClick={addProcess}>
-          Add Process
-        </Button>
-      </div>
     </div>
   );
 };
