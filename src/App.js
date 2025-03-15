@@ -40,15 +40,15 @@ function App() {
     let selectedAlgorithm = algorithms[schedulingMethod];
     if (selectedAlgorithm) {
       // pass processes as an object when calling 'selectedAlgorithm'
-      const newCalculations = selectedAlgorithm({ processes }).map((calc) => ({
+      const newCalculations = selectedAlgorithm({ processes, timeQuantum }).map((calc) => ({
         ...calc,
         algorithm: schedulingMethod, // Add algorithm name to differentiate results
       }));
 
-      setCalculations([
-        ...calculations,
-        ...newCalculations, // Spread newCalculations so that each item is added individually
-      ]);
+      setCalculations(prevCalculations => ({
+        ...prevCalculations,
+        [schedulingMethod]: newCalculations // Dynimcally update based on algorithm
+      }));
     } else {
       alert("Invalid Scheduling Method Selected!");
     }
@@ -67,7 +67,7 @@ function App() {
       <div className="container mt-4">
         <div className="row">
           {/* Input Table */}
-          <InputTable processes={processes} generateRandomProcess={generateRandomProcess} />
+          <InputTable processes={processes} generateRandomProcess={generateRandomProcess}/>
 
           {/* Scheduling Method Section */}
           <div className="col-md-4">
@@ -105,8 +105,11 @@ function App() {
           </div>
         </div>
         <div className="row pt-5">
-          {/* Output Table */}
-          {calculations.length > 0 && <OutputTable calculations={calculations} />}
+          {/* Displays a new table for each algorithm if it's not empty*/}
+        {Object.keys(calculations).map(algorithm => 
+        calculations[algorithm].length > 0 && 
+        <OutputTable key={algorithm} algorithm={algorithm} calculations={calculations[algorithm]} />
+        )}
         </div>
       </div>
     </div>

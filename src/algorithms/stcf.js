@@ -1,8 +1,6 @@
 export const stcf = ({ processes }) => {
-    console.log('Running STCF Algorithm');
-
     // Sort processes by arrival time initially
-    processes.sort((a, b) => a.arrivalTime - b.arrivalTime);
+    let orderedProcesses = [...processes].sort((a, b) => a.arrivalTime - b.arrivalTime);
 
     let currentTime = 0;
     let completed = 0;
@@ -11,7 +9,7 @@ export const stcf = ({ processes }) => {
     let calculations = []
 
     // creating new version of processes array but with additional properties
-    let remainingProcesses = processes.map(p => ({
+    let remainingProcesses = orderedProcesses.map(p => ({
         ...p,
         remainingTime: p.burstTime, // Keep track of remaining execution time
         startTime: null,  // Track when the process first starts executing
@@ -20,7 +18,7 @@ export const stcf = ({ processes }) => {
 
     let ganttChart = [];
 
-    while (completed < processes.length) {
+    while (completed < orderedProcesses.length) {
         // Select the process with the shortest remaining time that has arrived
         // ensures that only processes that have already arrived are considered.
         // Also ensures that only processes that still need execution are considered.
@@ -71,13 +69,8 @@ export const stcf = ({ processes }) => {
     }
 
     // Calculate average waiting time and average turnaround time
-    let averageWaitingTime = waitingTime / processes.length;
-    let averageTurnAroundTime = turnAroundTime / processes.length;
-
-    console.log("Average Waiting Time:", averageWaitingTime);
-    console.log("Average Turnaround Time:", averageTurnAroundTime);
-    console.log("Gantt Chart:", ganttChart);
-    console.log("Calculations:", calculations);
+    let averageWaitingTime = waitingTime / orderedProcesses.length;
+    let averageTurnAroundTime = turnAroundTime / orderedProcesses.length;
 
     return calculations
 };

@@ -1,8 +1,9 @@
-export const OutputTable = ({ calculations}) => {
+export const OutputTable = ({ calculations, algorithm }) => {
 
     return (
-        <div className="col-md-8">
+      <div className="col-md-8">
       {/* Table Section */}
+      <h4>{algorithm} Results</h4>
       <table className="table table-bordered">
         <thead className="table-primary">
           <tr>
