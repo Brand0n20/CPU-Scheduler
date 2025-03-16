@@ -9,6 +9,7 @@ import { rr } from './algorithms/rr';
 import { stcf } from './algorithms/stcf';
 import InputTable from './components/inputTable';
 import { OutputTable } from './components/outputTable';
+import BarChart from './components/barChart';
 
 function App() {
   const [processes, setProcesses] = useState([]);
@@ -104,12 +105,16 @@ function App() {
             </div>
           </div>
         </div>
-        <div className="row pt-5">
-          {/* Displays a new table for each algorithm if it's not empty*/}
-        {Object.keys(calculations).map(algorithm => 
-        calculations[algorithm].length > 0 && 
-        <OutputTable key={algorithm} algorithm={algorithm} calculations={calculations[algorithm]} />
-        )}
+          <div className="row pt-5">
+            {/* Loop through calculations and render components for each algorithm */}
+            {Object.keys(calculations).map(algorithm =>
+              calculations[algorithm].length > 0 && (
+                <div key={algorithm} className="col-md-6">
+                  <OutputTable algorithm={algorithm} calculations={calculations[algorithm]} />
+                  <BarChart algorithm={algorithm} calculations={calculations[algorithm]} /> 
+                </div>
+              )
+            )}
         </div>
       </div>
     </div>
