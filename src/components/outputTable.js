@@ -1,7 +1,20 @@
+import { Button } from "react-bootstrap"
+import exportToPDF from "./exportToPDF"
+import { useRef } from "react"
+
 export const OutputTable = ({ calculations, algorithm }) => {
 
+  const printRef = useRef(null)
+
+  const handleDownloadPdf = () => {
+    const element = printRef.current
+    if (!element) {
+      return;
+    }
+  }
+
     return (
-      <div className="col-md-8">
+      <div ref={printRef} className="col-md-8">
       {/* Table Section */}
       <h4>{algorithm} Results</h4>
       <table className="table table-bordered">
@@ -29,6 +42,10 @@ export const OutputTable = ({ calculations, algorithm }) => {
           ))}
         </tbody>
       </table>
+      {/* Export Button */}
+      <Button variant="secondary" className="mt-3" onClick={() => exportToPDF(calculations)}>
+          Export to PDF
+      </Button>
     </div>
     )
 }

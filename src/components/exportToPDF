@@ -1,0 +1,59 @@
+// src/exportToPDF.js
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable'; // Import jsPDF autoTable for tables
+
+const exportToPDF = (calculations) => {
+  const doc = new jsPDF();
+  console.log(calculations)
+
+  // Add Title
+  doc.setFontSize(18);
+  doc.text('CPU Scheduling Results', 20, 20);
+
+  // Add Scheduling Results for Each Algorithm
+  let yPosition = 30;
+  Object.keys(calculations).forEach((algorithm) => {
+    if (calculations[algorithm].length > 0) {
+      // Add Algorithm Name
+      doc.setFontSize(14);
+      doc.text(`${algorithm} Results:`, 20, yPosition);
+      yPosition += 10;
+
+      // Create a table for each algorithm using autoTable
+      const tableData = calculations[algorithm].map((calc) => [
+        calc.id,
+        calc.arrivalTime,
+        calc.burstTime,
+        calc.completionTime,
+        calc.waitingTime,
+        calc.turnaroundTime,
+      ]);
+
+      const tableColumns = [
+        'Process ID',
+        'Arrival Time',
+        'Burst Time',
+        'Completion Time',
+        'Waiting Time',
+        'Turnaround Time',
+      ];
+
+      // Use autoTable to add the table
+      doc.autoTable({
+        startY: yPosition,
+        head: [tableColumns],
+        body: tableData,
+        margin: { top: 10 },
+        styles: { fontSize: 10 },
+      });
+
+      // Adjust yPosition after the table to avoid overlap
+      yPosition = doc.lastAutoTable.finalY + 10;
+    }
+  });
+
+  // Save the generated PDF
+  doc.save('cpu-scheduling-results.pdf');
+};
+
+export default exportToPDF; // Default export

@@ -10,6 +10,8 @@ import { mlfq } from './algorithms/mlfq';
 import InputTable from './components/inputTable';
 import { OutputTable } from './components/outputTable';
 import BarChart from './components/barChart';
+import exportToPDF from './components/exportToPDF';
+
 
 function App() {
   const [processes, setProcesses] = useState([]);
