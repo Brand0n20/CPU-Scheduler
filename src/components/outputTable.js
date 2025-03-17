@@ -26,14 +26,21 @@ export const OutputTable = ({ calculations, algorithm }) => {
     const imageWidth = canvas.width;
     const imageHeight = canvas.height;
 
-    // Scale the image to fit the page, while maintaining aspect ratio
-    const aspectRatio = imageWidth / imageHeight;
-    const scaledWidth = pdfWidth;
-    const scaledHeight = pdfWidth / aspectRatio;
+    // Decrease the width to make the image thinner, while maintaining the aspect ratio
+    const scaleFactor = 0.8; // Set this to a value between 0 and 1 to make the image thinner (but not too small)
+    let scaledWidth = imageWidth * scaleFactor; // Reduce the width, but not too much
+    let scaledHeight = (scaledWidth / imageWidth) * imageHeight; // Adjust height based on the aspect ratio
+
+    // Ensure the image fits within the page width and height
+    if (scaledWidth > pdfWidth) {
+      scaledWidth = pdfWidth; // Limit the width to the PDF page width
+      scaledHeight = (scaledWidth / imageWidth) * imageHeight; // Adjust height to maintain aspect ratio
+    }
 
     if (scaledHeight > pdfHeight) {
+      const scaleFactorForHeight = pdfHeight / scaledHeight;
+      scaledWidth *= scaleFactorForHeight;
       scaledHeight = pdfHeight;
-      scaledWidth = pdfHeight * aspectRatio;
     }
 
     pdf.addImage(data, 'PNG', 0, 0, scaledWidth, scaledHeight);
@@ -43,7 +50,8 @@ export const OutputTable = ({ calculations, algorithm }) => {
   }
 
     return (
-      <div ref={printRef} className="col-md-8">
+      <div className="col-md-8">
+      <div  ref={printRef}>
       {/* Table Section */}
       <h4>{algorithm} Results</h4>
       <table className="table table-bordered">
@@ -71,6 +79,7 @@ export const OutputTable = ({ calculations, algorithm }) => {
           ))}
         </tbody>
       </table>
+      </div>
       {/* Export Button */}
       <Button variant="secondary" className="mt-3" onClick={handleDownloadPdf}>
           Export to PDF
