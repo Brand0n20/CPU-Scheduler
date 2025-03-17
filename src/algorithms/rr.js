@@ -11,7 +11,6 @@ export const rr = ({ processes, timeQuantum }) => {
             index++;
         }
 
-        // If no process is ready, jump to the next arrival time
         if (queue.length === 0) {
             currentTime = ordered[index].arrivalTime;
             continue;
