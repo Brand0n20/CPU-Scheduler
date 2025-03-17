@@ -40,8 +40,8 @@ export const rr = ({ processes, timeQuantum }) => {
         let turnaroundTime = p.completionTime - p.arrivalTime; // Define it first
         return {
             ...p,
-            turnaroundTime, //Now it's available
-            waitingTime: turnaroundTime - p.burstTime //Correct reference
+            turnaroundTime, 
+            waitingTime: turnaroundTime - p.burstTime 
         };
     });
     
