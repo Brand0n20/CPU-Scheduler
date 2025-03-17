@@ -69,8 +69,8 @@ export const stcf = ({ processes }) => {
     }
 
     // Calculate average waiting time and average turnaround time
-    let averageWaitingTime = waitingTime / orderedProcesses.length;
-    let averageTurnAroundTime = turnAroundTime / orderedProcesses.length;
+    //let averageWaitingTime = waitingTime / orderedProcesses.length;
+    //let averageTurnAroundTime = turnAroundTime / orderedProcesses.length;
 
     return calculations
 };
