@@ -11,11 +11,13 @@ const BarChart = ({ algorithm, calculations }) => {
       chartInstance.current.destroy(); // Destroy previous chart before creating a new one
     }
 
+    // Get the context of the canvas element to create a new chart
     const ctx = chartRef.current.getContext("2d");
+
     chartInstance.current = new Chart(ctx, {
       type: "bar",
       data: {
-        labels: calculations.map((p) => `P${p.id}`),
+        labels: calculations.map((p) => `Process ${p.id}`),
         datasets: [
           {
             label: "Turnaround Time",

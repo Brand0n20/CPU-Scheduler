@@ -14,7 +14,7 @@ import BarChart from './components/barChart';
 function App() {
   const [processes, setProcesses] = useState([]);
   const [schedulingMethod, setSchedulingMethod] = useState("FIFO");
-  const [timeQuantum, setTimeQuantum] = useState(2);
+  const [timeQuantum, setTimeQuantum] = useState(0);
   const [calculations, setCalculations] = useState([]);
 
   // Function to generate a random process
