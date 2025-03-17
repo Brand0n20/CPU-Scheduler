@@ -1,16 +1,45 @@
 import { Button } from "react-bootstrap"
-import exportToPDF from "./exportToPDF"
 import { useRef } from "react"
+import html2canvas from "html2canvas"
+import jsPDF from "jspdf"
 
 export const OutputTable = ({ calculations, algorithm }) => {
 
   const printRef = useRef(null)
 
-  const handleDownloadPdf = () => {
+  const handleDownloadPdf = async () => {
     const element = printRef.current
     if (!element) {
       return;
     }
+    const canvas = await html2canvas(element);
+    const data = canvas.toDataURL('image/png')
+
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "px",
+      format: "a4"
+    })
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const imageWidth = canvas.width;
+    const imageHeight = canvas.height;
+
+    // Scale the image to fit the page, while maintaining aspect ratio
+    const aspectRatio = imageWidth / imageHeight;
+    const scaledWidth = pdfWidth;
+    const scaledHeight = pdfWidth / aspectRatio;
+
+    if (scaledHeight > pdfHeight) {
+      scaledHeight = pdfHeight;
+      scaledWidth = pdfHeight * aspectRatio;
+    }
+
+    pdf.addImage(data, 'PNG', 0, 0, scaledWidth, scaledHeight);
+    pdf.save('ProcessResults.pdf')
+
+
   }
 
     return (
@@ -43,7 +72,7 @@ export const OutputTable = ({ calculations, algorithm }) => {
         </tbody>
       </table>
       {/* Export Button */}
-      <Button variant="secondary" className="mt-3" onClick={() => exportToPDF(calculations)}>
+      <Button variant="secondary" className="mt-3" onClick={handleDownloadPdf}>
           Export to PDF
       </Button>
     </div>
