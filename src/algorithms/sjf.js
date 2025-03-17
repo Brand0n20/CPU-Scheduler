@@ -43,8 +43,6 @@ export const sjf = ({ processes }) => {
     // Calculate average waiting time and average turnaround time
     let totalWaitingTime = calculations.reduce((sum, p) => sum + p.waitingTime, 0);
     let totalTurnaroundTime = calculations.reduce((sum, p) => sum + p.turnaroundTime, 0);
-    let averageWaitingTime = totalWaitingTime / processes.length;
-    let averageTurnaroundTime = totalTurnaroundTime / processes.length;
 
     return calculations
 };
